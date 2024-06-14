@@ -10,6 +10,7 @@ const authRoute=require('./routes/auth')
 const userRoute=require('./routes/users')
 const postRoute=require('./routes/posts')
 const commentRoute=require('./routes/comments')
+// const path=require('path')
 
 //database
 const connectDB=async()=>{
@@ -53,7 +54,10 @@ app.post("/api/upload",upload.single("file"),(req,res)=>{
     res.status(200).json("Image has been uploaded successfully!")
 })
 
-
+app.get('/',(req,res)=>{
+    app.use(express.static(path.resolve(__dirname,"frontend","dist")));  
+    res.sendFile(path.resolve(__dirname,"frontend","dist","index.html"));
+});
 app.listen(process.env.PORT,()=>{
     connectDB()
     console.log("app is running on port "+process.env.PORT)
