@@ -1,23 +1,29 @@
 const express=require('express')
 const router=express.Router()
-const User=require('../models/User')
+const User=require('../models/user.model')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
 
-//REGISTER
+//REGISTER--create user
 router.post("/register",async(req,res)=>{
     try{
         const {username,email,password}=req.body
         const salt=await bcrypt.genSalt(10)
         const hashedPassword=await bcrypt.hashSync(password,salt)
-        const newUser=new User({username,email,password:hashedPassword})
-        const savedUser=await newUser.save()
+        const newUser=new User({username,email,password:hashedPassword});//-->shortcut , jab key value pair ke same naam ho
+        // const newUser=new User({username:username,email:email,password:hashedPassword})// -->concentional way
+        const savedUser=await newUser.save();
+        
         res.status(200).json(savedUser)
 
     }
-    catch(err){
-        res.status(500).json(err)
+    catch(error){
+        if (error.name === 'ValidationError') {
+            return res.status(400).send({ message: error.message });
+        }
+        // res.status(500).json(error)
+        res.status(500).send({ message: "kucch gadbad hai Daya!!" });
     }
 
 })
@@ -27,7 +33,7 @@ router.post("/register",async(req,res)=>{
 router.post("/login",async (req,res)=>{
     try{
         const user=await User.findOne({email:req.body.email})
-        console.log("login hua process")
+        console.log("login hua process",user)
        
         if(!user){
             return res.status(404).json("User not found!")
@@ -42,8 +48,11 @@ router.post("/login",async (req,res)=>{
         res.cookie("token",token).status(200).json(info)
 
     }
-    catch(err){
-        res.status(500).json(err)
+    catch(error){
+        if (error.name === 'ValidationError') {
+            return res.status(400).send({ message: error.message });
+        }
+        res.status(500).json(error)
     }
 })
 

@@ -13,25 +13,15 @@ const commentRoute=require('./routes/comments')
 // const path=require('path')
 
 //database
-const connectDB=async()=>{
-    try{
-        await mongoose.connect(process.env.MONGO_URL)
-        console.log("database is connected successfully!")
-
-    }
-    catch(err){
-        console.log(err)
-    }
-}
-
-
+const connectDB=require('./database/dbConnect')
 
 //middlewares
 dotenv.config()
 app.use(express.json())
 app.use("/images",express.static(path.join(__dirname,"/images")))
-app.use(cors({origin:"http://localhost:5173",credentials:true}))
-app.use(cookieParser())
+app.use(cors({origin:"https://blogging-site-frontend-6ua935fl1-namit1903s-projects.vercel.app/",credentials:true}))
+// app.use(cors({origin:"http://localhost:5173",credentials:true}))
+app.use(cookieParser())//parse the client req obj cookies and populate req.cookies
 app.use("/api/auth",authRoute)
 app.use("/api/users",userRoute)
 app.use("/api/posts",postRoute)
@@ -59,6 +49,6 @@ app.get('/',(req,res)=>{
     res.sendFile(path.resolve(__dirname,"frontend","dist","index.html"));
 });
 app.listen(process.env.PORT,()=>{
-    connectDB()
+    connectDB();// this is an async funtion so agla line execute kro bruh!!
     console.log("app is running on port "+process.env.PORT)
 })

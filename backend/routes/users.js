@@ -1,13 +1,13 @@
 const express=require('express')
 const router=express.Router()
-const User=require('../models/User')
+const User=require('../models/user.model')
 const bcrypt=require('bcrypt')
-const Post=require('../models/Post')
-const Comment=require('../models/Comment')
+const Post=require('../models/post.model')
+const Comment=require('../models/comment.model')
 const verifyToken = require('../verifyToken')
 
 
-//UPDATE
+//UPDATE==put yani replace
 router.put("/:id",verifyToken,async (req,res)=>{
     //after token verification we get userId
     try{

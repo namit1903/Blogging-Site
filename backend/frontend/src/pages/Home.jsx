@@ -12,7 +12,7 @@ import { UserContext } from "../context/UserContext"
 const Home = () => {
   
   const {search}=useLocation()
-  // console.log(search)
+  console.log("serach",search)
   const [posts,setPosts]=useState([])
   const [noResults,setNoResults]=useState(false)
   const [loader,setLoader]=useState(false)
