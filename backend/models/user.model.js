@@ -5,12 +5,12 @@ const UserSchema=new mongoose.Schema({
         type:String,
         required:true,
         unique:true,
-        enum:['om','namit','tony'] 
+        // enum:['om','namit','tony'] 
         // enum restricts the value of username to predefined set of values
     },
     email:{
         type:String,
-        required:[true,"password is required bruh!!"],
+        required:[true,"email is required bruh!!"],
         unique:true
     },
     password:{
