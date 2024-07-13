@@ -11,6 +11,8 @@ const userRoute=require('./routes/users')
 const postRoute=require('./routes/posts')
 const commentRoute=require('./routes/comments')
 // const path=require('path')
+const cloudinary=require('./config/cloudinaryConfig.js')
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 //database
 const connectDB=require('./database/dbConnect')
@@ -28,6 +30,7 @@ app.use("/api/posts",postRoute)
 app.use("/api/comments",commentRoute)
 
 //image upload
+/*
 const storage=multer.diskStorage({
     destination:(req,file,fn)=>{
         fn(null,"images")
@@ -36,13 +39,23 @@ const storage=multer.diskStorage({
         fn(null,req.body.img)
         // fn(null,"image1.jpg")
     }
-})
+})*/
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'images', // Folder in your Cloudinary account
+      allowed_formats: ['jpg', 'png', 'jpeg'],
+    },
+  });
+  
+
 
 const upload=multer({storage:storage})
 app.post("/api/upload",upload.single("file"),(req,res)=>{
     // console.log(req.body)
     res.status(200).json("Image has been uploaded successfully!")
 })
+    
 
 app.get('/',(req,res)=>{
     app.use(express.static(path.resolve(__dirname,"frontend","dist")));  

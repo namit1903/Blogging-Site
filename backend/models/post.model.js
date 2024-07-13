@@ -16,6 +16,10 @@ const PostSchema=new mongoose.Schema({
         required:false,
         
     },
+    imgUrl:{
+        type:String,
+        required:true,
+    },
     username:{
         type:String,
         required:true,  

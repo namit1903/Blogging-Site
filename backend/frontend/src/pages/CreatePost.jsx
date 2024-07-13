@@ -7,6 +7,9 @@ import { UserContext } from '../context/UserContext'
 import { URL } from '../url'
 import axios from 'axios'
 import { Navigate, useNavigate } from 'react-router-dom'
+//although this should be in .env file
+const CLOUDINARY_URL="https://api.cloudinary.com/v1_1/dtilpfqrs/image/upload"
+const CLOUDINARY_UPLOAD_PRESET = 'images_preset';
 
 const CreatePost = () => {
    
@@ -47,12 +50,16 @@ const CreatePost = () => {
           const filename=Date.now()+file.name
           data.append("img",filename)
           data.append("file",file)
+          data.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
           post.photo=filename//create an property for the object post above{post:filename}
           // console.log(data)
           //img upload
           try{
-            const imgUpload=await axios.post(URL+"/api/upload",data)
-            // console.log(imgUpload.data)
+            const imgUpload = await axios.post(CLOUDINARY_URL, data);
+          
+            console.log(imgUpload.data);
+            post.imgUrl = imgUpload.data.secure_url;
+            console.log( "image url hai..", post.imgUrl)//sab thi chal rha hai yhan
           }
           catch(err){
             console.log(err)
@@ -61,7 +68,13 @@ const CreatePost = () => {
         //post upload
         // console.log(post)
         try{
-          const res=await axios.post(URL+"/api/posts/create",post,{withCredentials:true})
+          const res=await axios.post(URL+"/api/posts/create",post, {
+            headers: {
+                 'Content-Type': 'application/json',
+                // 'Content-Type': 'multipart/form-data' this gave error 500
+            },
+            withCredentials: true // Ensure credentials are not included
+        })
           navigate("/posts/post/"+res.data._id)
           // console.log(res.data)
 
