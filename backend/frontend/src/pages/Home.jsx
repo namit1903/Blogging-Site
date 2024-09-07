@@ -12,7 +12,7 @@ import { UserContext } from "../context/UserContext"
 const Home = () => {
   
   const {search}=useLocation()
-  console.log("serach",search)
+  console.log("search",search)
   const [posts,setPosts]=useState([])
   const [noResults,setNoResults]=useState(false)
   const [loader,setLoader]=useState(false)
@@ -39,7 +39,7 @@ const Home = () => {
       setLoader(true)
     }
   }
-
+//render ke baaad chalega or jab search krenge tb bhi chalega useEffect;
   useEffect(()=>{
     fetchPosts()
 
@@ -55,6 +55,7 @@ const Home = () => {
         {loader?<div className="h-[40vh] flex justify-center items-center"><Loader/></div>:!noResults?
         posts.map((post)=>(
           <>
+          {/*Home posts are clickable now,using <Link>... agar user exist nahi krta to login pr jana hai */}
           <Link to={user?`/posts/post/${post._id}`:"/login"}>
           <HomePosts key={post._id} post={post}/>
           </Link>

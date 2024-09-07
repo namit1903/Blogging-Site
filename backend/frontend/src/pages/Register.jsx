@@ -17,6 +17,7 @@ const Register = () => {
     
     try{
       const res=await axios.post(URL+"/api/auth/register",{username,email,password})
+      //redundant code hai set dunction niche wale
       setUsername(res.data.username)
       setEmail(res.data.email)
       setPassword(res.data.password)
